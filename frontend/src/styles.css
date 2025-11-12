@@ -1,0 +1,25 @@
+:root {
+    --bg: #0a0a0a;
+    --primary-blue: #0b84d0;
+    --accent-yellow: #f6c21d;
+    --text-light: #ffffff;
+    --text-muted: #cfcfcf;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    /* color: var(--text-light); */
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    font-weight: bold;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}

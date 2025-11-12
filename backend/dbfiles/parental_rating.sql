@@ -1,0 +1,12 @@
+INSERT INTO starlightcinemadb.parental_rating (id, description, rating) VALUES (1, 'All ages', 'A');
+INSERT INTO starlightcinemadb.parental_rating (id, description, rating) VALUES (2, 'Parental guidance', 'PG');
+INSERT INTO starlightcinemadb.parental_rating (id, description, rating) VALUES (3, 'Suitable for ages 7–9, parental guidance recommended', '7-9PG');
+INSERT INTO starlightcinemadb.parental_rating (id, description, rating) VALUES (4, 'Suitable for ages 10–12, parental guidance recommended', '10-12PG');
+INSERT INTO starlightcinemadb.parental_rating (id, description, rating) VALUES (5, 'Restricted to viewers 13 and older', '13');
+INSERT INTO starlightcinemadb.parental_rating (id, description, rating) VALUES (6, 'Restricted to viewers 16 and older', '16');
+INSERT INTO starlightcinemadb.parental_rating (id, description, rating) VALUES (7, 'Restricted to viewers 18 and older', '18');
+INSERT INTO starlightcinemadb.parental_rating (id, description, rating) VALUES (8, 'Restricted adult content (explicit sexual content)', 'X18');
+INSERT INTO starlightcinemadb.parental_rating (id, description, rating) VALUES (9, 'Prohibited for distribution (banned content)', 'XX');
+INSERT INTO starlightcinemadb.parental_rating (id, description, rating) VALUES (12, 'May contain fighting scenes', 'PG-13');
+INSERT INTO starlightcinemadb.parental_rating (id, description, rating) VALUES (13, 'Contains Graphic Content', 'PG-16');
+INSERT INTO starlightcinemadb.parental_rating (id, description, rating) VALUES (14, 'Parental Guidance is advised', 'PG');
