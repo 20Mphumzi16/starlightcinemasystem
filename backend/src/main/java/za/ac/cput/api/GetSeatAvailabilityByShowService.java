@@ -34,26 +34,28 @@ public class GetSeatAvailabilityByShowService {
     }
 
     public List<SeatStatusDTO> getSeatAvailabilityByShow(Long showId) {
-        // ✅ 1. Get the show directly
+
+        // Step 1 Get the show directly
         var show = showService.read(showId);
-        // ✅ 2. Get the hall from the show
+
+        // Step 2 Get the hall from the show
         Hall hall = show.getHall();
         if (hall == null) {
             throw new RuntimeException("No hall associated with show ID " + showId);
         }
 
-        // ✅ 3. Get all reserved seats for this show
+        // Step 3 Get all reserved seats for this show
         List<SeatReservation> reservedSeats = seatReservationService.getSeatReservationsByShow(showId);
 
-        // ✅ 4. Extract occupied seat IDs
+        // Step 4 Extract occupied seat IDs
         Set<Long> occupiedIds = reservedSeats.stream()
                 .map(r -> r.getSeat().getId())
                 .collect(Collectors.toSet());
 
-        // ✅ 5. Get all seats in that hall
+        //Step 5 Get all seats in that hall
         List<Seat> seats = seatService.getAllByHall(hall.getId());
 
-        // ✅ 6. Combine results into DTO
+        // Step 6 Combine results into DTO
         return seats.stream()
                 .map(s -> new SeatStatusDTO(
                         s.getId(),

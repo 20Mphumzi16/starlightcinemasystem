@@ -9,17 +9,18 @@ import java.time.LocalDate;
 import java.util.Set;
 
 public class MovieFactory {
-    public static Movie createMovie(String title, byte[]photo, LocalDate releaseDate, Set<Genre>genres, int durationMinutes, ParentalRating rating, String description) {
+    public static Movie createMovie(String title, byte[] photo, LocalDate releaseDate, Set<Genre> genres, String trailerUrl, String photoUrl, int durationMinutes, ParentalRating rating, String description) {
 
-        if(Helper.isStringNullorEmpty(title)
-                ||Helper.isArrayNullOrEmpty(photo)
-                ||Helper.isSetNullorEmpty(genres)
-                ||durationMinutes<=0
-                ||Helper.isObjectNull(rating)
-                ||Helper.isStringNullorEmpty(description)
+        if (Helper.isStringNullorEmpty(title)
+                || Helper.isArrayNullOrEmpty(photo)
+                || Helper.isSetNullorEmpty(genres)
+                || durationMinutes <= 0
+                || Helper.isObjectNull(rating)
+                || Helper.isStringNullorEmpty(description)
+                || Helper.isStringNullorEmpty(photoUrl)
+                || Helper.isStringNullorEmpty(trailerUrl)
 
-        )
-        {
+        ) {
             return null;
         }
 
@@ -27,6 +28,8 @@ public class MovieFactory {
                 .setTitle(title)
                 .setPhoto(photo)
                 .setGenres(genres)
+                .setPhotoUrl(photoUrl)
+                .setDurationMinutes(durationMinutes)
                 .setReleaseDate(releaseDate)
                 .setDurationMinutes(durationMinutes)
                 .setDescription(description)

@@ -4,28 +4,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import za.ac.cput.domain.Movie;
-import za.ac.cput.domain.Show;
 
 import za.ac.cput.domain.Wishlist;
-import za.ac.cput.service.MovieService.MovieService;
-import za.ac.cput.service.ShowService.ShowService;
 import za.ac.cput.service.WishlistService.WishlistService;
 
 
-import java.time.LocalDate;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Objects;
 
 @Component
 public class RemoveFromWishlistService {
-    private final MovieService  movieService;
+
     private final WishlistService wishlistService;
 
     @Autowired
-    public RemoveFromWishlistService(WishlistService wishlistService, MovieService movieService) {
+    public RemoveFromWishlistService(WishlistService wishlistService) {
         this.wishlistService=wishlistService;
-       this.movieService=movieService;
     }
 
     public Wishlist removeShowFromWishList(Long wishlistId, Long movieId) {
@@ -58,7 +52,7 @@ public class RemoveFromWishlistService {
         if (!updated) {
             // Handle case where movie was not found in the cart
             System.out.println("movie with Id: " + movieId + " not found in wishlist.");
-            return wishlist; // Return the cart as is
+            return wishlist; // Return the wishlist as is
         }
 
         // Create a new Cart instance with updated date

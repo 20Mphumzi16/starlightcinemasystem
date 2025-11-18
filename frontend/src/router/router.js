@@ -22,6 +22,7 @@ import AdminMovies from '@/components/AdminMovies.vue'
 import AdminShows from '@/components/AdminShows.vue'
 import AdminGenres from '@/components/AdminGenres.vue'
 import ConfirmationPage from '@/pages/ConfirmationPage.vue'
+import AdminLogin from '@/pages/AdminLogin.vue';
 
 const routes = [
   { path: '/', component: HomePage },
@@ -32,11 +33,18 @@ const routes = [
   component: SeatSelectionPage,
   props: true
 },
+
 {
   path: '/showtimes/:id',
   name: 'Showtimes',
   component: ShowtimesPage,
   props: true
+},
+
+{
+  path: '/admin/login',
+  name: 'AdminLogin',
+  component: AdminLogin
 },
 {
   path: '/payment',
@@ -84,3 +92,17 @@ export const router = createRouter({
   history: createWebHistory(),
   routes,
 })
+// ✅ Route guard for admin authentication
+router.beforeEach((to, from, next) => {
+  const adminId = localStorage.getItem('adminId')
+
+  if (to.path.startsWith('/admin') && to.path !== '/admin/login' && !adminId) {
+    next('/admin/login')
+  } else if (to.path === '/admin/login' && adminId) {
+    // if admin is already logged in, redirect away from login page
+    next('/admin/dashboard')
+  } else {
+    next()
+  }
+})
+

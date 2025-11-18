@@ -99,10 +99,9 @@ class BookingFactoryTest {
         genres3.add(genre3);
 
 
-        movie1=MovieFactory.createMovie("Fantastic 4",new byte[0], LocalDate.of(2024,6,20),genres1,160,rating1,"The fantstic 4 is back on track to save the world.");
-        movie2=MovieFactory.createMovie("Expandables",new byte[0],LocalDate.of(2025,1,20),genres2,92,rating2,"Dom is kidnapped and the Expandables are born again.");
-        movie3=MovieFactory.createMovie("Love Island",new byte[0],LocalDate.of(2024,2,17),genres3,90,rating3,"TLove is in the air in this city.");
-
+        movie1=MovieFactory.createMovie("Fantastic 4",new byte[0], LocalDate.of(2024,6,20),genres1,"www.trailer.com","www.image.com",160,rating1,"The fantstic 4 is back on track to save the world.");
+        movie2=MovieFactory.createMovie("Expandables",new byte[0],LocalDate.of(2025,1,20),genres2,"www.trailer.com","www.image.com",92,rating2,"Dom is kidnapped and the Expandables are born again.");
+        movie3=MovieFactory.createMovie("Love Island",new byte[0],LocalDate.of(2024,2,17),genres3,"www.trailer.com","www.image.com",90,rating3,"TLove is in the air in this city.");
         show1=ShowFactory.createShow(movie1,hall1, LocalDateTime.of(2025,11,12,9,0),LocalDateTime.of(2025,11,12,11,0),370, ShowStatus.SCHEDULED);
         System.out.println(show1);
         show2=ShowFactory.createShow(movie2,hall2, LocalDateTime.of(2025,10,16,15,0),LocalDateTime.of(2025,10,16,17,0),980,ShowStatus.SCHEDULED);
