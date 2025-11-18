@@ -47,6 +47,8 @@ public class SeatController {
     public List<Seat> getAll() {
         return seatService.getAllSeats();
     }
+
+
     @GetMapping("/seats/{showId}")
     public ResponseEntity<List<SeatStatusDTO>> getSeatsForShow(@PathVariable Long showId) {
         List<SeatStatusDTO> seats =getSeatAvailabilityByShowService.getSeatAvailabilityByShow(showId);

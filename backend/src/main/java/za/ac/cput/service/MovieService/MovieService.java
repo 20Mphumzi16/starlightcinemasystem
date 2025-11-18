@@ -45,6 +45,10 @@ public class MovieService implements IMovieService  {
         return movieRepository.findAll();
     }
 
+    public List<Movie> getByTitle(String title) {
+        return movieRepository.findMovieByTitleContainingIgnoreCase(title);
+    }
+
     public long getTotalMovies() {
         return movieRepository.count();
     }

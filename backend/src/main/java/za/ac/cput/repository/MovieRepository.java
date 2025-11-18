@@ -7,5 +7,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface MovieRepository extends JpaRepository<Movie, Long> {
+   List<Movie>  findMovieByTitleContainingIgnoreCase(String title);
 
 }

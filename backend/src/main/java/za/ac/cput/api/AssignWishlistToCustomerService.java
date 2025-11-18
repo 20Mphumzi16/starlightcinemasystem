@@ -8,10 +8,6 @@ import za.ac.cput.service.CustomerService.CustomerService;
 import za.ac.cput.service.WishlistService.WishlistService;
 
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 @Component
 public class AssignWishlistToCustomerService {
 

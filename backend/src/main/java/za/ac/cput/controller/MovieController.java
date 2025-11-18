@@ -6,6 +6,7 @@ import za.ac.cput.domain.Movie;
 import za.ac.cput.service.MovieService.MovieService;
 
 import java.util.List;
+
 @CrossOrigin("localhost:3000")
 @RestController
 @RequestMapping("/movie")
@@ -43,6 +44,11 @@ public class MovieController {
         return movieService.getAllMovies();
     }
 
+    @GetMapping("/search/{title}")
+
+   public List<Movie> searchMovie(@PathVariable String title) {
+        return movieService.getByTitle(title);
+    }
 
     @GetMapping("/total-movies")
     public long getTotalMovies() {

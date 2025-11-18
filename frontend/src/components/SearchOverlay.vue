@@ -2,34 +2,32 @@
   <div class="search-overlay">
     <button class="close" @click="$emit('close')">✖</button>
     
-    <!-- 🔍 Search Input -->
+
     <div class="search-box">
       <input 
         type="text" 
         v-model="query" 
         placeholder="Search movies..."
-      />
+      />  
     </div>
 
-    <!-- 🎬 Results -->
     <div class="results">
       <div 
-        v-for="movie in filteredMovies" 
+        v-for="movie in moviesToShow" 
         :key="movie.id" 
         class="movie-card"
+        @click="goToShowtimes(movie.id)"
       >
-     <img 
+        <img 
           :src="`data:image/jpeg;base64,${movie.photo}`" 
           :alt="movie.title" 
         />
         <h3>{{ movie.title }}</h3>
-     <span class="badge">{{ movie.rating?.rating }}</span>
-
+        <span class="badge">{{ movie.rating?.rating }}</span>
       </div>
 
-      <!-- Loading and Empty States -->
-      <p v-if="loading" class="loading">Loading movies...</p>
-      <p v-else-if="!filteredMovies.length" class="no-results">
+      <p v-if="loading" class="loading">Loading...</p>
+      <p v-else-if="!moviesToShow.length" class="no-results">
         No movies found.
       </p>
     </div>
@@ -37,38 +35,66 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue"
+import { ref, computed, watch, onMounted } from "vue"
 import axios from "axios"
+import { useRouter } from "vue-router"
 
-const movies = ref([])
+const router = useRouter()
+
+const defaultMovies = ref([])
+
+const searchedMovies = ref([])
+
 const query = ref("")
-const loading = ref(true)
 
-// 🎥 Fetch movies from backend
-const fetchMovies = async () => {
+const loading = ref(false)
+
+let debounceTimer = null
+
+onMounted(async () => {
   try {
-    const response = await axios.get("http://localhost:8080/starlight/movie/get-all")
-    movies.value = response.data
-    console.log("✅ Movies fetched:", movies.value)
-  } catch (error) {
-    console.error("❌ Error fetching movies:", error)
+    const res = await axios.get("http://localhost:8080/starlight/movie/get-all")
+    defaultMovies.value = res.data
+  } catch (err) {
+    console.error("❌ Error loading default movies:", err)
+  }
+})
+
+const searchMovies = async () => {
+  if (!query.value) {
+    searchedMovies.value = []
+    return
+  }
+
+  loading.value = true
+  try {
+    const res = await axios.get(
+      `http://localhost:8080/starlight/movie/search/${encodeURIComponent(query.value)}`
+    )
+    searchedMovies.value = res.data 
+  } catch (err) {
+    console.error("Search error:", err)
+    searchedMovies.value = []
   } finally {
     loading.value = false
   }
 }
-
-// Auto-load when component mounts
-onMounted(() => {
-  fetchMovies()
+// Debounce the search to avoid too many requests
+watch(query, () => {
+  clearTimeout(debounceTimer)
+  debounceTimer = setTimeout(() => {
+    searchMovies()
+  }, 300)
 })
 
-// 🔍 Computed search filter
-const filteredMovies = computed(() => {
-  if (!query.value) return movies.value
-  return movies.value.filter(movie =>
-    movie.title.toLowerCase().includes(query.value.toLowerCase())
-  )
+
+const moviesToShow = computed(() => {
+  return query.value ? searchedMovies.value : defaultMovies.value
 })
+
+const goToShowtimes = (id) => {
+  router.push(`/showtimes/${id}`)
+}
 </script>
 
 <style scoped>
@@ -123,6 +149,12 @@ const filteredMovies = computed(() => {
   border-radius: 8px;
   padding: 10px;
   text-align: center;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.movie-card:hover {
+  transform: scale(1.03);
 }
 
 .movie-card img {
