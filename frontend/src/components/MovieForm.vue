@@ -16,6 +16,11 @@
               <input v-model="form.title" placeholder="Enter movie title..." />
             </div>
 
+             <div class="form-group full-width">
+              <label>Movie Trailer URL</label>
+              <input v-model="form.trailerUrl" placeholder="enter trailer URL" />
+            </div>
+
             <div class="form-group full-width">
               <label>Poster Image</label>
               <input type="file" accept="image/*" @change="handleFileUpload" />
@@ -61,7 +66,7 @@
 </select>
             </div>
 
-            
+           
 
             <div class="form-group full-width">
               <label>Description</label>
@@ -134,6 +139,7 @@ const availableRatings = ref([])
 const form = reactive({
   title: '',
   photo: null,
+  trailerUrl: '',
   genres: [],
   releaseDate: '',
   durationMinutes: 0,
@@ -197,6 +203,7 @@ async function save() {
     title: form.title,
     description: form.description,
     photo: form.photo,
+    trailerUrl: form.trailerUrl,
     durationMinutes: form.durationMinutes,
     releaseDate: form.releaseDate,
     genres: form.genres.map(g => ({ id: g.id, name: g.name })),
