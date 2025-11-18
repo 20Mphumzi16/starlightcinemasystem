@@ -1,5 +1,6 @@
 <template>
   <div class="search-overlay">
+    <SpinnerComponent :visible="loading"/>
     <button class="close" @click="$emit('close')">✖</button>
     
 
@@ -38,6 +39,7 @@
 import { ref, computed, watch, onMounted } from "vue"
 import axios from "axios"
 import { useRouter } from "vue-router"
+import SpinnerComponent from "./SpinnerComponent.vue"
 
 const router = useRouter()
 
@@ -53,10 +55,13 @@ let debounceTimer = null
 
 onMounted(async () => {
   try {
+    loading.value = true
     const res = await axios.get("http://localhost:8080/starlight/movie/get-all")
     defaultMovies.value = res.data
   } catch (err) {
     console.error("❌ Error loading default movies:", err)
+  } finally {
+    loading.value = false
   }
 })
 

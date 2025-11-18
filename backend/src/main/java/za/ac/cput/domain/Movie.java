@@ -19,6 +19,8 @@ public class Movie {
     @ManyToMany(fetch = FetchType.EAGER)
     @Column(name = "genre")
     private Set<Genre> genres;
+    private String trailerUrl;
+    private String photoUrl;
     private LocalDate releaseDate;
     private int durationMinutes;
     @ManyToOne(fetch = FetchType.EAGER)
@@ -34,6 +36,8 @@ public class Movie {
         this.photo = builder.photo;
         this.releaseDate=builder.releaseDate;
         this.genres = builder.genres;
+        this.trailerUrl=builder.trailerUrl;
+        this.photoUrl=builder.photoUrl;
         this.durationMinutes = builder.durationMinutes;
         this.rating = builder.rating;
         this.description = builder.description;
@@ -71,6 +75,13 @@ public class Movie {
         return description;
     }
 
+    public String getTrailerUrl() {
+        return trailerUrl;
+    }
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -83,6 +94,7 @@ public class Movie {
     public int hashCode() {
         return Objects.hash(id);
     }
+
     @Override
     public String toString() {
         return "Movie{" +
@@ -90,6 +102,8 @@ public class Movie {
                 ", title='" + title + '\'' +
                 ", photo=" + Arrays.toString(photo) +
                 ", genres=" + genres +
+                ", trailerUrl='" + trailerUrl + '\'' +
+                ", photoUrl='" + photoUrl + '\'' +
                 ", releaseDate=" + releaseDate +
                 ", durationMinutes=" + durationMinutes +
                 ", rating=" + rating +
@@ -103,6 +117,8 @@ public class Movie {
         private byte[] photo;
         private LocalDate releaseDate;
         private Set<Genre> genres;
+        private String trailerUrl;
+        private String photoUrl;
         private int durationMinutes;
         private ParentalRating rating;
         private String description;
@@ -136,6 +152,16 @@ public class Movie {
             return this;
         }
 
+        public MovieBuilder setTrailerUrl(String trailerUrl) {
+            this.trailerUrl = trailerUrl;
+            return this;
+        }
+
+        public MovieBuilder setPhotoUrl(String photoUrl) {
+            this.photoUrl = photoUrl;
+            return this;
+        }
+
         public MovieBuilder setDurationMinutes(int durationMinutes) {
             this.durationMinutes = durationMinutes;
             return this;
@@ -157,6 +183,8 @@ public class Movie {
             this.photo = movie.photo;
             this.releaseDate = movie.releaseDate;
             this.genres = movie.genres;
+            this.trailerUrl = movie.trailerUrl;
+            this.photoUrl = movie.photoUrl;
             this.durationMinutes = movie.durationMinutes;
             this.rating = movie.rating;
             this.description = movie.description;

@@ -5,13 +5,37 @@
       <div class="left-panel">
         <h1><strong>{{ movie.title }}</strong></h1>
 
-        <!-- Poster -->
+        <!-- Poster + Trailer -->
         <div class="poster-wrapper">
-          <div class="poster-bg" :style="{ backgroundImage: `url(${movie.photo})` }"></div>
-          <div class="poster">
-            <img :src="movie.photo" alt="Movie Poster" />
-          </div>
-        </div>
+  <div class="poster-bg" :style="{ backgroundImage: `url(${movie.photo})` }"></div>
+  <div class="poster">
+    <!-- If trailer is being shown -->
+    <iframe
+      v-if="showTrailer && embedUrl"
+      :src="embedUrl"
+      frameborder="0"
+      allow="autoplay; encrypted-media"
+      allowfullscreen
+    ></iframe>
+
+    <!-- Otherwise show the poster image -->
+    <img
+      v-else
+      :src="movie.photo"
+      alt="Movie Poster"
+    />
+
+    <!-- Play Trailer Button (only if valid trailerUrl exists and not already showing) -->
+    <button
+      v-if="!showTrailer && embedUrl"
+      class="play-btn"
+      @click="showTrailer = true"
+    >
+      <i class="fa-solid fa-play"></i>
+      Watch Trailer
+    </button>
+  </div>
+</div>
 
         <!-- DETAILS SECTION -->
         <div class="details-row">
@@ -88,29 +112,55 @@
             </div>
           </div>
         </div>
+
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, defineProps } from "vue";
+
+import { ref, computed, onMounted, defineProps, watch, toRef } from "vue";
 import axios from "axios";
 
 const props = defineProps({
   movie: { type: Object, required: true },
 });
-// eslint-disable-next-line vue/no-setup-props-destructure
-const movie = props.movie;
+const movie = toRef(props, 'movie');
+
 const shows = ref([]);
 const selectedDate = ref("");
 const selectedShow = ref(null);
 
-// 🟢 Fetch shows for this specific movie
+// Trailer logic
+const showTrailer = ref(false);
+
+// Safely extract YouTube ID
+function extractYouTubeId(url) {
+  if (!url || typeof url !== "string") return null; // ✅ handle undefined/null/non-string
+  const match = url.match(
+    /(?:youtu\.be\/|youtube\.com\/(?:embed\/|watch\?v=))([^?&"'>]+)/
+  );
+  return match && match[1] ? match[1] : null;
+}
+
+// Only compute embedUrl if trailerUrl exists and is valid
+const embedUrl = computed(() => {
+  if (!movie.value || !movie.value.trailerUrl) return null; // ✅ handle undefined movie
+  const id = extractYouTubeId(movie.value.trailerUrl);
+  return id ? `https://www.youtube.com/embed/${id}?autoplay=1&rel=0` : null;
+});
+
+// Reset trailer when movie changes
+watch(movie, () => {
+  showTrailer.value = false;
+});
+
+// Fetch shows for this movie
 onMounted(async () => {
   try {
     const { data } = await axios.get(
-      `http://localhost:8080/starlight/show/by-movie/${movie.id}`
+      `http://localhost:8080/starlight/show/by-movie/${movie.value.id}`
     );
     shows.value = data || [];
   } catch (err) {
@@ -118,7 +168,7 @@ onMounted(async () => {
   }
 });
 
-// 🧩 Group shows by date
+// Group shows by date
 const showsByDate = computed(() => {
   const map = {};
   shows.value.forEach((show) => {
@@ -129,10 +179,10 @@ const showsByDate = computed(() => {
   return map;
 });
 
-// 🗓️ Extract available dates
+// Available dates
 const availableDates = computed(() => Object.keys(showsByDate.value).sort());
 
-// 🕒 Helpers
+// Helpers
 function formatDate(dateStr) {
   const date = new Date(dateStr);
   return date.toLocaleDateString("en-GB", {
@@ -318,7 +368,8 @@ function selectDate(date) {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
 }
 
-.poster img {
+.poster img,
+.poster iframe {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
@@ -410,6 +461,32 @@ function selectDate(date) {
 
 .other-locations a:hover {
   text-decoration: underline;
+}
+/* Play button overlay inside poster */
+.play-btn {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(255, 0, 0, 0.9);
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  z-index: 2;
+}
+
+.play-btn i {
+  font-size: 1rem;
+}
+
+.play-btn:hover {
+  background: rgba(255, 0, 0, 1);
 }
 
 /* Responsive: when the screen is narrow, stack the columns */

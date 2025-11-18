@@ -2,7 +2,6 @@ package za.ac.cput.domain;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -10,8 +9,6 @@ import java.util.Set;
 @Entity
 @DiscriminatorValue("Customer")
 public class Customer extends User{
-
-
 
     protected Customer(CustomerBuilder builder){
         super.id=builder.id;
